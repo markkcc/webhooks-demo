@@ -1,0 +1,93 @@
+---
+version: 2.1
+
+commands:
+  bundle_install:
+    description: "Install Gems via Bundler"
+    steps:
+    - run:
+        name: "Install Gems via Bundler"
+        command: bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --deployment
+
+  update_rubygems_and_bundler:
+    description: "Install latest Bundler/Update RubyGems"
+    steps:
+    - run:
+        name: "Install latest Bundler/Update RubyGems"
+        command: |
+          gem update --system
+          gem install bundler
+
+references:
+  default_env_vars: &default_env_vars
+    DISPLAY: ":99.0"
+
+  ruby: 
+    image: circleci/ruby:2.6.5
+
+  node_browsers:
+    image: circleci/ruby:2.6.5-node-browsers
+
+  postgres:
+    image: circleci/postgres:10.7-alpine-ram
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+
+  gem_cache_key: &gem_cache_key
+                   gem-cache-v1-{{ arch }}-{{ checksum "Gemfile.lock" }}
+
+  restore_gems: &restore_gems
+    restore_cache:
+      keys:
+      - *gem_cache_key
+      - gem-cache-v1-{{ arch }}
+
+jobs:
+  test:
+    working_directory: ~/repo
+
+    environment:
+      <<: *default_env_vars
+
+    docker:
+    - *ruby
+    - *node_browsers
+    - *postgres
+
+    steps:
+    - checkout
+    - update_rubygems_and_bundler
+
+    - *restore_gems
+    - bundle_install
+    - save_cache:
+        key: *gem_cache_key
+        paths:
+          - vendor/bundle
+    - restore_cache:
+        name: Restore Yarn Package Cache
+        keys:
+          - yarn-packages-{{ checksum "yarn.lock" }}
+    - run:
+        name: Install Yarn Dependencies
+        command: yarn install --frozen-lockfile
+    - save_cache:
+        name: Save Yarn Package Cache
+        key: yarn-packages-{{ checksum "yarn.lock" }}
+        paths:
+          - ~/.cache/yarn
+
+    - run:
+        name: "Run Setup"
+        command: ./bin/setup
+
+    - run:
+        name: "Run tests"
+        command: bundle exec rake
+
+workflows:
+  version: 2
+
+  ci-pipeline:
+    jobs:
+    - test
