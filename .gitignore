@@ -20,3 +20,6 @@
 .byebug_history
 
 .env
+
+# ignore precompiled assets
+/public/assets/*
