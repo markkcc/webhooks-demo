@@ -135,7 +135,7 @@ GEM
     omniauth-oauth2 (1.6.0)
       oauth2 (~> 1.1)
       omniauth (~> 1.9)
-    pg (0.21.0)
+    pg (1.2.3)
     platform-api (2.2.0)
       heroics (~> 0.0.25)
       moneta (~> 1.0.0)
@@ -216,7 +216,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active_model_serializers (~> 0.10.6)
+  active_model_serializers
   byebug
   capybara
   chromedriver-helper
@@ -226,7 +226,7 @@ DEPENDENCIES
   launchy
   multi_json
   omniauth-heroku
-  pg (~> 0.18)
+  pg
   platform-api
   puma (~> 3.12)
   rails (~> 5.2.4.2)

@@ -6,12 +6,12 @@ git_source(:github) do |repo_name|
 end
 
 gem 'rails', '~> 5.2.4.2'
-gem 'pg', '~> 0.18'
+gem 'pg'
 gem 'puma', '~> 3.12'
 gem 'multi_json'
 gem 'uglifier'
 gem 'jquery-rails', '>= 4.3.3'
-gem 'active_model_serializers', '~> 0.10.6'
+gem 'active_model_serializers'
 gem 'omniauth-heroku'
 gem 'platform-api'
 gem 'tzinfo-data'
