@@ -50,7 +50,7 @@ Rails.application.configure do
 
 
   # Prevent migrating from db/schema.rb
-  config.active_record.schema_format = :sql
+  #config.active_record.schema_format = :sql
 
 
 end

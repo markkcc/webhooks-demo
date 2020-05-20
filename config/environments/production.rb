@@ -91,6 +91,6 @@ Rails.application.configure do
   # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
 
   # Prevent migrating from db/schema.rb
-  config.active_record.schema_format = :sql
+  #config.active_record.schema_format = :sql
 
 end
